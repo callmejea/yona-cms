@@ -23,6 +23,7 @@ class Bootstrap
 
         // Registry
         $registry = new \Phalcon\Registry();
+        $registry->cms = array('DEBUG_MODE' => $config->debug);
         $di->set('registry', $registry);
 
         // Loader
@@ -34,11 +35,11 @@ class Bootstrap
 
         // Database
         $db = new \Phalcon\Db\Adapter\Pdo\Mysql([
-            "host"     => $config->database->host,
+            "host" => $config->database->host,
             "username" => $config->database->username,
             "password" => $config->database->password,
-            "dbname"   => $config->database->dbname,
-            "charset"  => $config->database->charset,
+            "dbname" => $config->database->dbname,
+            "charset" => $config->database->charset,
         ]);
         $di->set('db', $db);
 
@@ -71,9 +72,9 @@ class Bootstrap
 
         // Flash helper
         $flash = new \Phalcon\Flash\Session([
-            'error'   => 'ui red inverted segment',
+            'error' => 'ui red inverted segment',
             'success' => 'ui green inverted segment',
-            'notice'  => 'ui blue inverted segment',
+            'notice' => 'ui blue inverted segment',
             'warning' => 'ui orange inverted segment',
         ]);
         $di->set('flash', $flash);
@@ -102,7 +103,7 @@ class Bootstrap
             $routesClassName = str_replace('Module', 'Routes', $module['className']);
             if (class_exists($routesClassName)) {
                 $routesClass = new $routesClassName();
-                $router      = $routesClass->init($router);
+                $router = $routesClass->init($router);
             }
             $initClassName = str_replace('Module', 'Init', $module['className']);
             if (class_exists($initClassName)) {
@@ -118,7 +119,7 @@ class Bootstrap
     private function initEventManager($di)
     {
         $eventsManager = new \Phalcon\Events\Manager();
-        $dispatcher    = new \Phalcon\Mvc\Dispatcher();
+        $dispatcher = new \Phalcon\Mvc\Dispatcher();
 
         $eventsManager->attach("dispatch:beforeDispatchLoop", function ($event, $dispatcher) use ($di) {
             new \YonaCMS\Plugin\CheckPoint($di->get('request'));
@@ -173,9 +174,9 @@ class Bootstrap
         $volt->initCompiler();
 
 
-        $phtml       = new \Phalcon\Mvc\View\Engine\Php($view, $di);
+        $phtml = new \Phalcon\Mvc\View\Engine\Php($view, $di);
         $viewEngines = [
-            ".volt"  => $volt,
+            ".volt" => $volt,
             ".phtml" => $phtml,
         ];
 
@@ -195,7 +196,7 @@ class Bootstrap
 
         $cacheFrontend = new \Phalcon\Cache\Frontend\Data([
             "lifetime" => 60,
-            "prefix"   => HOST_HASH,
+            "prefix" => HOST_HASH,
         ]);
 
         $cache = null;
@@ -263,7 +264,7 @@ class Bootstrap
         $view->start();
 
         $registry = $di['registry'];
-        if ($registry->cms['DEBUG_MODE']) {
+        if (isset($registry->cms['DEBUG_MODE']) && $registry->cms['DEBUG_MODE']) {
             $debug = new \Phalcon\Debug();
             $debug->listen();
 

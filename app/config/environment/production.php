@@ -23,5 +23,7 @@ return [
         'port' => 11211,
     ],
 
+    'debug' => false,
+
     'cache'     => 'memcached', // memcache, memcached
 ];
