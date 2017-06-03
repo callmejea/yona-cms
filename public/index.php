@@ -4,7 +4,7 @@ chdir(dirname(__DIR__));
 
 define('ROOT', __DIR__);
 define('HOST_HASH', substr(md5($_SERVER['HTTP_HOST']), 0, 12));
-define('MOBILE_DEVICE',false);
+define('MOBILE_DEVICE',array_key_exists('mobile',$_REQUEST) && $_REQUEST['mobile']=='true' ? true: false);
 
 if (isset($_SERVER['APPLICATION_ENV'])) {
     $applicationEnv = ($_SERVER['APPLICATION_ENV'] ? $_SERVER['APPLICATION_ENV'] : 'production');
